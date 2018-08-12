@@ -1,0 +1,23 @@
+
+// Body
+$body-bg: #f5f8fa;
+$body-bg: #fcfdfd;
+$body-color: rgb(120,120,120);
+
+// Typography
+$font-family-sans-serif: system-ui, sans-serif;
+$font-size-base: 0.8rem;
+
+// Border Radius
+
+$border-radius:               .1rem !default;
+
+
+$theme-colors: (
+  "primary":#80CFA9,
+   "secondary": #4C6663,
+   "other": #065A82,
+   "primary-accent": lighten(#80CFA9,32%),
+   "secondary-accent": lighten(#4C6663,32%),
+   "other-accent": lighten(#065A82,32%),
+);

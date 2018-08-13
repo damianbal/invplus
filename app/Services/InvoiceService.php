@@ -49,7 +49,13 @@ class InvoiceService
         return $sum;
     }
 
-    public function getTax($tax = 20) {
+    /**
+     * Get tax out fo total
+     *
+     * @param float $tax
+     * @return void
+     */
+    public function getTax($tax = 0.20) {
         return $this->getTotal() * $tax;
     }
 

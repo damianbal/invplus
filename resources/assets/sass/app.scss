@@ -8,6 +8,11 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
 .navbar-invplus {
   background: #80CFA9;
 }

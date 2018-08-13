@@ -24,11 +24,7 @@ class StoreInvoiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required:min:3',
-            'address' => 'min:3',
-            'address_city' => 'min:3',
-            'address_state' => 'min:3',
-            'address_country' => 'min:3'
+            'name' => 'min:3'
         ];
     }
 }

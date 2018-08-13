@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Invoice;
+use App\Client;
 
 class InvoiceController extends Controller
 {
@@ -38,7 +39,15 @@ class InvoiceController extends Controller
      */
     public function store(StoreInvoiceRequest $request)
     {
-        //
+        $name = $request->name; 
+        $client = Client::find($request->client_id);
+
+        $invoice = auth()->user()->invoices()->create([
+            'client_id' => $client->id,
+            'name' => $name
+        ]);
+
+        return back()->with('message', __('invocie.created'));
     }
 
     /**
@@ -47,9 +56,18 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show(Invoice $invoice)
+    {   
+        $client = $invoice->client;
+        $user = $invoice->user; 
+        $items = $invoice->invoiceItems;
+
+        return view('invoices.show', [
+            'invoice' => $invoice,
+            'client' => $client,
+            'user' => $user,
+            'items' => $items
+        ]);
     }
 
     /**
@@ -81,13 +99,23 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Invoice $invoice)
     {
-        //
+        if(!auth()->user()->can('destroy', $invoice)) {
+            return back();
+        }
+
+        $invoice->delete();
+
+        return back();
     }
 
     public function showPDF(Invoice $invoice)
     {
+        if(!auth()->user()->can('download', $invoice)) {
+            return back()->with('message', __('common.no_permission'));
+        }
+
         $client = $invoice->client;
       $user = $invoice->user;
       $items = $invoice->items;

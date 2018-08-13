@@ -10,6 +10,8 @@
 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 
+        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <title>InvPlus - @yield('title', '')</title>
@@ -29,6 +31,7 @@
                 @auth
             <a class="nav-item nav-link" href="{{route('clients.index')}}"><i class="fas fa-users"></i> Clients</a>
             <a class="nav-item nav-link" href="{{ route('invoices.index') }}"><i class="fas fa-file-invoice"></i> Invoices</a>
+            <a class="nav-item nav-link" href="{{ route('users.profile')  }}"><i class="fas fa-user"></i>  Profile</a>
                 <a class="nav-item nav-link" href="{{route('sign_out')}}"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
                 @endauth
 

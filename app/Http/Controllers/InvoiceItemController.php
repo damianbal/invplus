@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
 
-class UserController extends Controller
+class InvoiceItemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -55,9 +54,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit()
+    public function edit($id)
     {
-        return view('users.edit', ['user' => auth()->user()]);
+        //
     }
 
     /**
@@ -67,15 +66,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'min:3'
-        ]);
-
-        auth()->user()->update($request->all());
-
-        return back()->with('message', __('user.profile_updated'));
+        //
     }
 
     /**

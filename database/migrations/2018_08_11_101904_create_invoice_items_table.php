@@ -20,7 +20,7 @@ class CreateInvoiceItemsTable extends Migration
             $table->integer('cost')->default(0);
             $table->integer('quantity')->default(1); // or hourly rate
             $table->integer('invoice_id')->default(0);
-            $table->string('invoice_number')->default('000000');
+           
             $table->timestamps();
         });
     }

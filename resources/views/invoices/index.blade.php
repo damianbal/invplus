@@ -37,8 +37,8 @@
                       <td class="d-none d-sm-block">{{ $invoiceService->getTotal() }}</td>
                       <td>
                           <div class="btn-group">
-                          <a href="#" class="btn btn-outline-primary">@lang('common.view')</a>
-                          <a href="#" class="btn btn-outline-danger">@lang('common.remove')</a>
+                          <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-outline-primary">@lang('common.view')</a>
+                          <a href="{{ route('invoices.destroy', $invoice) }}" class="btn btn-outline-danger">@lang('common.remove')</a>
                           <a href="{{ route('invoices.show_pdf', $invoice) }}" class="btn btn-outline-info">@lang('common.pdf')</a>
                           </div>
                       </td>
@@ -48,6 +48,50 @@
 
                 </tbody>
               </table>
+
+
+                       <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          <i class="fas fa-plus"></i> @lang('invoice.create')
+      </button>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">@lang('invoice.create_invoice')</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <form method="POST" action="{{ route('invoices.store') }}">
+              @csrf
+                <div class="form-group">
+                    <label>@lang('common.name')</label>
+                    <input class="form-control" name="name" type="text" placeholder="@lang('client.name')" minlength="3" required>
+                </div>
+
+                <div class="form-group">
+                  <label>Client:</label>
+                <select name="client_id" class="custom-select" required>
+                    <option selected>Select client</option>
+                  
+                    @foreach(Auth::user()->clients as $client)
+                      <option value="{{$client->id}}">{{$client->name}}</option>
+                    @endforeach
+                  </select>
+                </div>
+
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> @lang('invoice.create')</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
 

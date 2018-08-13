@@ -9,5 +9,6 @@ return [
     'state' => 'State',
     'country' => 'Country',
     'zipcode' => 'ZIP Code',
-    'created' => 'Client created!'
+    'created' => 'Client created!',
+    'client' => 'Client'
 ];

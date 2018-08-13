@@ -36,7 +36,7 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sans-serif: system-ui, sans-serif;
+  --font-family-sans-serif: "Poppins", system-ui, sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -75,7 +75,7 @@ section {
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: "Poppins", system-ui, sans-serif;
   font-size: 0.8rem;
   font-weight: 400;
   line-height: 1.5;
@@ -6880,7 +6880,7 @@ button.close {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: "Poppins", system-ui, sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -7005,7 +7005,7 @@ button.close {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: system-ui, sans-serif;
+  font-family: "Poppins", system-ui, sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -11121,6 +11121,10 @@ a.text-other-accent:focus {
     color: inherit;
     border-color: #dee2e6;
   }
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
 }
 
 .navbar-invplus {

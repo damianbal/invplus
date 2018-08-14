@@ -15,7 +15,8 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'App\Client' => 'App\Policies\ClientPolicy',
         'App\User' => 'App\Policies\UserPolicy',
-        'App\Invoice' => 'App\Policies\InvoicePolicy'
+        'App\Invoice' => 'App\Policies\InvoicePolicy',
+        'App\InvoiceItem' => 'App\Policies\InvoiceItemPolicy'
     ];
 
     /**

@@ -13,6 +13,18 @@ Route::get('/invoices/{invoice}/remove', 'InvoiceController@destroy')->name('inv
 Route::get('/invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
 Route::get('/invoices/{invoice}/pdf', 'InvoiceController@showPDF')->name('invoices.show_pdf');
 
+
+/*
+|--------------------------------------------------------------------------
+| Invoice Items
+|--------------------------------------------------------------------------
+*/
+Route::post('/invoices/{invoice}/items', 'InvoiceItemController@store')->name('invoices.items.store');
+Route::get('/invoices/items/{invoiceItem}/remove', 'InvoiceItemController@destroy')->name('invoices.items.destroy');
+Route::get('/invoices/items/{invoiceItem}/increase', 'InvoiceItemController@increase')->name('invoices.items.increase');
+Route::get('/invoices/items/{invoiceItem}/decrease', 'InvoiceItemController@decrease')->name('invoices.items.decrease');
+
+
 /*
 |--------------------------------------------------------------------------
 | User
@@ -20,6 +32,7 @@ Route::get('/invoices/{invoice}/pdf', 'InvoiceController@showPDF')->name('invoic
 */
 Route::get('/profile', 'UserController@edit')->name('users.profile');
 Route::post('/profile', 'UserController@update')->name('users.update_profile');
+
 
 /*
 |--------------------------------------------------------------------------

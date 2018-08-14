@@ -3,9 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Invoice;
+use App\Services\InvoiceService;
+use App\InvoiceItem;
 
 class InvoiceItemController extends Controller
 {
+    protected $invoiceService;
+
+    public function __construct(InvoiceService $invoiceService)
+    {   
+        $this->invoiceService = $invoiceService;
+
+        $this->middleware(['auth']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,9 +44,23 @@ class InvoiceItemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Invoice $invoice)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:3',
+            'description' => 'min:3',
+            'quantity' => 'numeric',
+            'cost' => 'numeric'
+        ]);
+
+        if(!auth()->user()->can('manage', $invoice)) {
+            return back();
+        }
+
+        $this->invoiceService->setInvoice($invoice);
+        $invoiceItem = $this->invoiceService->addItem($request->all());
+
+        return back()->with('message', __('invoice.item_added'));
     }
 
     /**
@@ -77,8 +103,38 @@ class InvoiceItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(InvoiceItem $invoiceItem)
     {
-        //
+        if(!auth()->user()->can('manage', $invoiceItem)) {
+            return back();
+        }
+
+        $invoiceItem->delete();
+
+        return back();
+    }
+
+    public function increase(InvoiceItem $invoiceItem) 
+    {
+        if(!auth()->user()->can('manage', $invoiceItem)) {
+            return back();
+        }
+
+        $invoiceItem->increment('quantity');
+
+        return back();
+    }
+
+    public function decrease(InvoiceItem $invoiceItem)
+    {
+        if(!auth()->user()->can('manage', $invoiceItem)) {
+            return back();
+        }
+
+        if($invoiceItem->quantity > 0) {
+            $invoiceItem->decrement('quantity');
+        }
+
+        return back();
     }
 }

@@ -60,7 +60,7 @@ class InvoiceController extends Controller
     {   
         $client = $invoice->client;
         $user = $invoice->user; 
-        $items = $invoice->invoiceItems;
+        $items = $invoice->invoiceItems()->latest()->get();
 
         return view('invoices.show', [
             'invoice' => $invoice,

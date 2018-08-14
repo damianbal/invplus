@@ -20,6 +20,11 @@ class InvoicePolicy
         //
     }
 
+    public function manage(User $user, Invoice $invoice) 
+    {
+        return $user->id == $invoice->user_id;
+    }
+
     public function download(User $user, Invoice $invoice) 
     {
         return $user->id == $invoice->user_id;

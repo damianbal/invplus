@@ -118,7 +118,7 @@ class InvoiceController extends Controller
 
         $client = $invoice->client;
       $user = $invoice->user;
-      $items = $invoice->items;
+      $items = $invoice->invoiceItems()->latest()->get();
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView("pdf.invoice", ['invoice' => $invoice, 'user' => $user, 'items' => $items, 'client' => $client]);

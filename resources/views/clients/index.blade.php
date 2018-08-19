@@ -34,6 +34,7 @@ Clients
                 <td>
                   <div class="btn-group">
                     {{-- <a class="btn btn-outline-other" href="#">@lang('common.view')</a> --}}
+                  <a class="btn btn-outline-primary" href="{{ route('invoices.index') }}?client={{ $client->id }}"><i class="fas fa-file-invoice"></i> @lang('invoice.invoices')</a>
                   <a class="btn btn-outline-danger" href="{{ route('clients.destroy', $client->id) }}"><i class="fas fa-trash-alt"></i> @lang('common.remove')</a>
                   </div>
                 </td>

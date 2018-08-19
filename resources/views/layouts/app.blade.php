@@ -26,19 +26,18 @@
                 </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+            <a class="nav-item nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> Home</a>
 
                 @auth
-            <a class="nav-item nav-link" href="{{route('clients.index')}}"><i class="fas fa-users"></i> Clients</a>
-            <a class="nav-item nav-link" href="{{ route('invoices.index') }}"><i class="fas fa-file-invoice"></i> Invoices</a>
-            <a class="nav-item nav-link" href="{{ route('users.profile')  }}"><i class="fas fa-user"></i>  Profile</a>
-                <a class="nav-item nav-link" href="{{route('sign_out')}}"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+            <a class="nav-item nav-link" href="{{route('clients.index')}}"><i class="fas fa-users"></i> @lang('client.clients')</a>
+            <a class="nav-item nav-link" href="{{ route('invoices.index') }}"><i class="fas fa-file-invoice"></i> @lang('invoice.invoices')</a>
+            <a class="nav-item nav-link" href="{{ route('users.profile')  }}"><i class="fas fa-user"></i>  @lang('common.profile')</a>
+                <a class="nav-item nav-link" href="{{route('sign_out')}}"><i class="fas fa-sign-out-alt"></i> @lang('auth.sign_out')</a>
                 @endauth
 
                 @guest 
-                <a href="{{route('sign_in.show')}}"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-                <a href="{{route('sign_up.show')}}">Sign Up</a>
-
+                <a class="nav-item nav-link" href="{{route('sign_in.show')}}"><i class="fas fa-sign-in-alt"></i> @lang('auth.sign_in')</a>
+                <a class="nav-item nav-link" href="{{route('sign_up.show')}}">@lang('auth.sign_up')</a>
                 @endguest
             </div>
         </div>

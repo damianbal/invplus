@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class SignInController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
     public function show()
     {
         return view('auth.sign_in');

@@ -18,6 +18,24 @@
             <div>{{ $client->name }}</div>
             <div>{{ $client->getFullAddress() }}</div>
  
+            <br> 
+            
+            <h3><i class="fas fa-envelope"></i> @lang('common.send_email')</h3>
+            @if(isset($invoice->pdf))
+            <form action="{{ route('invoices.send', $invoice) }}" method="POST">
+                @csrf 
+
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input class="form-control" type="email" name="email" placeholder="Email...">
+                </div>
+
+                <button class="btn btn-primary"><i class="fas fa-envelope"></i> @lang('common.send')</button>
+            </form>
+            @else 
+                @lang('common.pdf_message_download')
+            @endif
+
             </div>
 
             <div class="col-6">
@@ -28,7 +46,38 @@
                     @php $invoiceService->setInvoice($invoice) @endphp
                     Total: {{ $invoiceService->getTotal() }}
                 </div>
+
+                <form class="mt-3" method="POST" action="{{ route('invoices.update', $invoice) }}">
+                    @csrf
+                            <div class="form-group">
+                                <label>Tax (Perecent):</label> <input type="number" max="100" min="0" value="{{ $invoice->tax_rate }}" class="form-control"
+                                    type="text" name="tax_rate">
+                            </div>
+                        
+                            <button type="submit" class="btn btn-primary">@lang('common.update')</button>
+                        
+                        </form>
+
+                        
+                        @if($invoice->include_tax)
+                        <form class="mt-3" method="POST" action="{{ route('invoices.update', $invoice) }}">
+                            @csrf
+                            Include tax in invoice? 
+                            <input type="hidden" name="include_tax" value="0">
+                            <button type="submit" class="btn btn-danger">@lang('common.no')</button>
+                        </form>
+                        @else 
+<form class="mt-3" method="POST" action="{{ route('invoices.update', $invoice) }}">
+    Include tax in invoice? &nbsp;
+    @csrf
+            <input type="hidden" name="include_tax" value="1">
+            <button type="submit" class="btn btn-success">@lang('common.yes')</button>
+        </form>
+                        @endif
+    
             </div>
+
+
         </div>
 
         <div class="row mb-3">

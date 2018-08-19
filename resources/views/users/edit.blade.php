@@ -8,7 +8,20 @@
     <div class="card-header">@lang('user.profile')</div>
 
     <div class="card-body">
-        <form method="POST" action="{{ route('users.update_profile') }}">
+        <form method="POST" action="{{ route('users.update_profile') }}" enctype="multipart/form-data">
+
+            <!--
+            <div class="card p-3 mb-3">
+                <h3 class="card-title">Upload Logo</h3>
+
+                @if($user->logo)
+                     <img width="300px" src="{{Storage::url($user->logo) }}">
+                @endif
+
+                <input type="file" name="logo">
+            </div>
+            -->
+
             @csrf
 
             <div class="form-group">

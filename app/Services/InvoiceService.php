@@ -1,16 +1,18 @@
-<?php 
+<?php
 
 namespace App\Services;
 
 use App\Invoice;
-use App\InvoiceItem;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Profiler\FileProfilerStorage;
+use Illuminate\Support\Facades\Storage;
 
-
-class InvoiceService 
+class InvoiceService
 {
     protected $invoice;
 
-    public function setInvoice(Invoice $invoice) {
+    public function setInvoice(Invoice $invoice)
+    {
         $this->invoice = $invoice;
     }
 
@@ -20,11 +22,23 @@ class InvoiceService
      * @param array $attributes
      * @return void
      */
-    public function addItem($attributes = []) {
-        if(!$this->invoice) return; 
+    public function addItem($attributes = [])
+    {
+        if (!$this->invoice) {
+            return;
+        }
 
         //$this->invoice->invoiceItems()->save(InvoiceItem::create($attributes));
         $this->invoice->invoiceItems()->create($attributes);
+    }
+
+    public function savePDF()
+    {
+        $pdf = $this->getPDF();
+
+        $pdfFileName = "pdf/invoice-" . $this->invoice->id . "-" . str_slug($this->invoice->client->name) . "-" . $this->invoice->client->invoices->count() . ".pdf";
+        Storage::put($pdfFileName, $pdf->output());
+        $this->invoice->update(['pdf' => $pdfFileName]);
     }
 
     /**
@@ -33,16 +47,31 @@ class InvoiceService
      *
      * @return void
      */
-    public function getPDF() {
-    
+    public function getPDF()
+    {
+        $client = $this->invoice->client;
+        $user = $this->invoice->user;
+        $items = $this->invoice->invoiceItems()->latest()->get();
+        $invoiceNumber = $this->invoice->client->invoices->count();
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView("pdf.invoice", ['invoice' => $this->invoice, 'user' => $user, 'items' => $items, 'client' => $client, 'invoice_number' => $invoiceNumber]);
+
+        return $pdf;
     }
 
-    public function getTotal() {
+    /**
+     * Return total amount of invoice
+     *
+     * @return void
+     */
+    public function getTotal()
+    {
         $sum = 0;
 
-        foreach($this->invoice->invoiceItems as $item) {
+        foreach ($this->invoice->invoiceItems as $item) {
 
-            $sum += (int)($item->cost * $item->quantity);
+            $sum += (int) ($item->cost * $item->quantity);
 
         }
 
@@ -53,13 +82,22 @@ class InvoiceService
      * Get tax out fo total
      *
      * @param float $tax
-     * @return void
+     * @return integer
      */
-    public function getTax($tax = 0.20) {
-        return $this->getTotal() * $tax;
+    public function getTax()
+    {
+        $tax_percent = $this->invoice->tax_rate / 100.0;
+        return $this->getTotal() * $tax_percent;
     }
 
-    public function getTotalWithTax($tax = 20) {
-        return $this->getTotal() + $this->getTax($tax);
+    /**
+     * Return total including tax
+     *
+     * @param integer $tax
+     * @return integer
+     */
+    public function getTotalWithTax()
+    {
+        return $this->getTotal() + $this->getTax();
     }
 }

@@ -6,17 +6,40 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Invoice;
 use App\Client;
+use App\Services\InvoiceService;
+use App\Http\Requests\UpdateInvoiceRequest;
 
 class InvoiceController extends Controller
 {
+    protected $invoiceService;
+
+    public function __construct(InvoiceService $invoiceService)
+    {
+        $this->middleware('auth');
+
+        $this->invoiceService = $invoiceService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = auth()->user()->invoices()->latest()->paginate(10);
+        // TODO: by client id
+        $client_id = $request->input('client', null);
+
+        if($client_id != null) {
+            if(Client::find($client_id)->user_id != auth()->user()->id) {
+                return back()->with('message', __('common.no_permission'));
+            }
+
+            $invoices = auth()->user()->invoices()->where('client_id', $client_id)->latest()->paginate(10);
+        }
+        else {
+            $invoices = auth()->user()->invoices()->latest()->paginate(10);
+        }
 
         return view('invoices.index', ['invoices' => $invoices]);
     }
@@ -47,7 +70,7 @@ class InvoiceController extends Controller
             'name' => $name
         ]);
 
-        return back()->with('message', __('invocie.created'));
+        return back()->with('message', __('invoice.created'));
     }
 
     /**
@@ -88,9 +111,18 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateInvoiceRequest $request, Invoice $invoice)
     {
-        //
+        if(!auth()->user()->can('manage', $invoice)) {
+            return back();
+        }
+
+        $invoice->update($request->all());
+
+        $this->invoiceService->setInvoice($invoice);
+
+
+        return back();
     }
 
     /**
@@ -116,13 +148,15 @@ class InvoiceController extends Controller
             return back()->with('message', __('common.no_permission'));
         }
 
-        $client = $invoice->client;
-      $user = $invoice->user;
-      $items = $invoice->invoiceItems()->latest()->get();
+        $this->invoiceService->setInvoice($invoice);
+        $pdf = $this->invoiceService->getPDF();
 
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView("pdf.invoice", ['invoice' => $invoice, 'user' => $user, 'items' => $items, 'client' => $client]);
-       
-        return $pdf->download("inv.pdf");
+        /*
+        $pdf->save('pdf/' . "invoice-for-" . str_slug($invoice->client->name) . ".pdf");
+        $invoice->update(['pdf' => 'pdf/' . "invoice-for-" . str_slug($invoice->client->name) . ".pdf"]);
+*/
+        $this->invoiceService->savePDF();
+
+        return $pdf->download("invoice-for-" . str_slug($invoice->client->name) . ".pdf");
     }
 }

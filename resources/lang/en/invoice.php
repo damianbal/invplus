@@ -1,5 +1,7 @@
 <?php 
 
 return [
-    'invoice' => 'Invoice'
+    'invoice' => 'Invoice',
+    'invoices' => 'Invoices',
+    'sent' => 'Invoice sent!'
 ];

@@ -33,7 +33,7 @@
                       <td>{{ $index + 1 }}</td> 
                       <td>{{ $invoice->name }}</td> 
                       <td>{{ $invoice->client->name }}</td> 
-                      <td>{{ $invoice->created_at->diffForHumans() }}</td>
+                      <td>{{ $invoice->created_at }}</td>
                       <td class="d-none d-sm-block">{{ $invoiceService->getTotal() }}</td>
                       <td>
                           <div class="btn-group">

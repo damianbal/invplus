@@ -20,6 +20,8 @@ class CreateInvoicesTable extends Migration
             $table->integer('client_id');
             $table->string('pdf')->nullable(); 
             $table->string('invoice_number')->default('000000');
+            $table->boolean('include_tax')->default(false);
+            $table->integer('tax_rate')->default(20);
             $table->timestamps();
         });
     }

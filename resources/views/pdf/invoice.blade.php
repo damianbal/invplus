@@ -13,7 +13,7 @@
 
     <style>
         body {
-            color: rgb(70, 70, 70);
+            color: rgb(85, 85, 85);
             -webkit-font-smoothing: antialiased;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
@@ -33,6 +33,7 @@
             height: 150px;
             color: #fff;
             border-radius: 4px;
+            color: rgba(255,255,255, 0.8);
         }
 
         .clearfix {
@@ -115,7 +116,13 @@
     <div class="bg">
         <div style="float: left; width: 35%;">
             <h4>
-                @if(!isset($user->company_name)) {{ $user->name }} @else {{ $user->company_name }} @endif
+            
+                @if(!isset($user->company_name)) 
+                {{ $user->name }} 
+                @else 
+                {{ $user->company_name }} 
+                @endif
+      
             </h4>
         </div>
         <div style="float: left; width: 30%;">
@@ -143,7 +150,7 @@
         </div>
         <div style="float: left; width: 49%; text-align: right;">
             <div class="muted">Invoice Number</div>
-            <div>{{ $invoice->invoice_number }}</div>
+            <div>{{ $invoice_number }}</div>
             <br>
             <div class="muted">Date Of Issue</div>
             <div>{{ now() }}</div>
@@ -172,7 +179,7 @@
         </div>
         <div class="clearfix"></div>
         @foreach($items as $item)
-        <div style="padding: 4px;">
+        <div style="padding: 4px; border-top:1px solid rgba(0,0,0,0.1);">
             <div class="row muted">
                 <div class="col3">
                     <div>
@@ -196,6 +203,25 @@
         </div>
         @endforeach
 
+        @if($invoice->include_tax)
+        <div class="row">
+                    <div class="col3">
+                
+                    </div>
+                    <div class="col3 text-center">
+                
+                    </div>
+                    <div class="col3 text-center">
+                        Tax
+                    </div>
+                    <div class="col3 text-center">
+                        @php $invoiceService->setInvoice($invoice) 
+@endphp {{ $invoiceService->getTax() }}
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            @endif
+
         <div class="row">
             <div class="col3">
 
@@ -211,6 +237,24 @@
             </div>
         </div>
         <div class="clearfix"></div>
+
+        @if($invoice->include_tax)
+        <div class="row">
+            <div class="col3">
+
+            </div>
+            <div class="col3 text-center">
+
+            </div>
+            <div class="col3 text-center">
+                Total with Tax
+            </div>
+            <div class="col3 text-center">
+                @php $invoiceService->setInvoice($invoice) @endphp {{ $invoiceService->getTotalWithTax() }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        @endif
     </div>
 </body>
 

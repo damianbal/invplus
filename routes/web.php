@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', 'InvoiceController@index')->name('home');
+Route::get('/', 'IndexController@index')->name('home');
 
 /*
 |--------------------------------------------------------------------------
@@ -9,9 +9,11 @@ Route::get('/', 'InvoiceController@index')->name('home');
 */
 Route::get('/invoices', 'InvoiceController@index')->name('invoices.index');
 Route::post('/invoices', 'InvoiceController@store')->name('invoices.store');
+Route::post('/invoices/{invoice}', 'InvoiceController@update')->name('invoices.update');
 Route::get('/invoices/{invoice}/remove', 'InvoiceController@destroy')->name('invoices.destroy');
 Route::get('/invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
 Route::get('/invoices/{invoice}/pdf', 'InvoiceController@showPDF')->name('invoices.show_pdf');
+Route::post('/invoices/{invoice}/send', 'SendInvoiceController@send')->name('invoices.send');
 
 
 /*
@@ -53,3 +55,5 @@ Route::post('/auth/sign-in', 'SignInController@submit')->name('sign_in.submit');
 Route::get('/auth/sign-out', 'SignInController@signOut')->name('sign_out');
 Route::get('/auth/sign-up', 'SignUpController@show')->name('sign_up.show');
 Route::post('/auth/sign-up', 'SignUpController@submit')->name('sign_up.submit');
+//Route::get('/auth/sign-in', 'SignInController@show')->name('login');
+Route::redirect('/login', '/auth/sign-in', 302);

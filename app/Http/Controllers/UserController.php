@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->middleware('auth');
+
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -70,10 +80,13 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'name' => 'min:3'
+            'name' => 'min:3',
         ]);
 
         auth()->user()->update($request->all());
+
+        $this->userService->setUser( auth()->user() );
+        $this->userService->handleLogoUpload($request);
 
         return back()->with('message', __('user.profile_updated'));
     }

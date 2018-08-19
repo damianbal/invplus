@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class SignUpController extends Controller
 {
     public function __construct() {
-        $this->middleware('guest');       
+         
     }
 
     public function show()
@@ -29,6 +29,6 @@ class SignUpController extends Controller
 
         $user = User::create($data);
 
-        return back()->with('message', __('common.account_created').'!');
+        return back()->with('message', __('auth.signed_up').'!');
     }
 }

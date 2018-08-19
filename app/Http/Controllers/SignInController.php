@@ -10,7 +10,7 @@ class SignInController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest');
+        
     }
 
     public function show()
@@ -22,16 +22,16 @@ class SignInController extends Controller
     {
         Auth::logout();
 
-        return back();
+        return redirect()->route('home')->with('message', __('auth.signed_out'));
     }
 
     public function submit(SignInRequest $request)
     {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password]))
         {
-            return back()->with('message', __('auth.signed_in'));
+            return redirect()->route('home')->with('message', __('auth.signed_in'));
         }
 
-        return back()->with('message', __('auth.could_not_sign_in'));
+        return redirect()->route('home')->with('message', __('auth.could_not_sign_in'));
     }
 }

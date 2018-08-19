@@ -56,4 +56,3 @@ Route::get('/auth/sign-out', 'SignInController@signOut')->name('sign_out');
 Route::get('/auth/sign-up', 'SignUpController@show')->name('sign_up.show');
 Route::post('/auth/sign-up', 'SignUpController@submit')->name('sign_up.submit');
 //Route::get('/auth/sign-in', 'SignInController@show')->name('login');
-Route::redirect('/login', '/auth/sign-in', 302);

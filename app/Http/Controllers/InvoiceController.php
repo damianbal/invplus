@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreInvoiceRequest;
-use App\Invoice;
 use App\Client;
-use App\Services\InvoiceService;
+use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
+use App\Invoice;
+use App\Services\InvoiceService;
+use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
@@ -30,14 +30,13 @@ class InvoiceController extends Controller
         // TODO: by client id
         $client_id = $request->input('client', null);
 
-        if($client_id != null) {
-            if(Client::find($client_id)->user_id != auth()->user()->id) {
+        if ($client_id != null) {
+            if (Client::find($client_id)->user_id != auth()->user()->id) {
                 return back()->with('message', __('common.no_permission'));
             }
 
             $invoices = auth()->user()->invoices()->where('client_id', $client_id)->latest()->paginate(10);
-        }
-        else {
+        } else {
             $invoices = auth()->user()->invoices()->latest()->paginate(10);
         }
 
@@ -62,12 +61,12 @@ class InvoiceController extends Controller
      */
     public function store(StoreInvoiceRequest $request)
     {
-        $name = $request->name; 
+        $name = $request->name;
         $client = Client::find($request->client_id);
 
         $invoice = auth()->user()->invoices()->create([
             'client_id' => $client->id,
-            'name' => $name
+            'name' => $name,
         ]);
 
         return back()->with('message', __('invoice.created'));
@@ -80,16 +79,16 @@ class InvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Invoice $invoice)
-    {   
+    {
         $client = $invoice->client;
-        $user = $invoice->user; 
+        $user = $invoice->user;
         $items = $invoice->invoiceItems()->latest()->get();
 
         return view('invoices.show', [
             'invoice' => $invoice,
             'client' => $client,
             'user' => $user,
-            'items' => $items
+            'items' => $items,
         ]);
     }
 
@@ -113,14 +112,13 @@ class InvoiceController extends Controller
      */
     public function update(UpdateInvoiceRequest $request, Invoice $invoice)
     {
-        if(!auth()->user()->can('manage', $invoice)) {
+        if (!auth()->user()->can('manage', $invoice)) {
             return back();
         }
 
         $invoice->update($request->all());
 
         $this->invoiceService->setInvoice($invoice);
-
 
         return back();
     }
@@ -133,7 +131,7 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
-        if(!auth()->user()->can('destroy', $invoice)) {
+        if (!auth()->user()->can('destroy', $invoice)) {
             return back();
         }
 
@@ -144,7 +142,7 @@ class InvoiceController extends Controller
 
     public function showPDF(Invoice $invoice)
     {
-        if(!auth()->user()->can('download', $invoice)) {
+        if (!auth()->user()->can('download', $invoice)) {
             return back()->with('message', __('common.no_permission'));
         }
 
@@ -154,7 +152,7 @@ class InvoiceController extends Controller
         /*
         $pdf->save('pdf/' . "invoice-for-" . str_slug($invoice->client->name) . ".pdf");
         $invoice->update(['pdf' => 'pdf/' . "invoice-for-" . str_slug($invoice->client->name) . ".pdf"]);
-*/
+         */
         $this->invoiceService->savePDF();
 
         return $pdf->download("invoice-for-" . str_slug($invoice->client->name) . ".pdf");

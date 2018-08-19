@@ -86,7 +86,7 @@ class UserController extends Controller
         auth()->user()->update($request->all());
 
         $this->userService->setUser( auth()->user() );
-        $this->userService->handleLogoUpload($request);
+        //$this->userService->handleLogoUpload($request);
 
         return back()->with('message', __('user.profile_updated'));
     }

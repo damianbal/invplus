@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Invoice;
-use App\Services\InvoiceService;
 use App\InvoiceItem;
+use App\Services\InvoiceService;
+use Illuminate\Http\Request;
 
 class InvoiceItemController extends Controller
 {
     protected $invoiceService;
 
     public function __construct(InvoiceService $invoiceService)
-    {   
+    {
         $this->invoiceService = $invoiceService;
 
         $this->middleware(['auth']);
@@ -50,10 +50,10 @@ class InvoiceItemController extends Controller
             'name' => 'required|min:3',
             'description' => 'min:3',
             'quantity' => 'numeric',
-            'cost' => 'numeric'
+            'cost' => 'numeric',
         ]);
 
-        if(!auth()->user()->can('manage', $invoice)) {
+        if (!auth()->user()->can('manage', $invoice)) {
             return back();
         }
 
@@ -105,7 +105,7 @@ class InvoiceItemController extends Controller
      */
     public function destroy(InvoiceItem $invoiceItem)
     {
-        if(!auth()->user()->can('manage', $invoiceItem)) {
+        if (!auth()->user()->can('manage', $invoiceItem)) {
             return back();
         }
 
@@ -114,9 +114,9 @@ class InvoiceItemController extends Controller
         return back();
     }
 
-    public function increase(InvoiceItem $invoiceItem) 
+    public function increase(InvoiceItem $invoiceItem)
     {
-        if(!auth()->user()->can('manage', $invoiceItem)) {
+        if (!auth()->user()->can('manage', $invoiceItem)) {
             return back();
         }
 
@@ -127,11 +127,11 @@ class InvoiceItemController extends Controller
 
     public function decrease(InvoiceItem $invoiceItem)
     {
-        if(!auth()->user()->can('manage', $invoiceItem)) {
+        if (!auth()->user()->can('manage', $invoiceItem)) {
             return back();
         }
 
-        if($invoiceItem->quantity > 0) {
+        if ($invoiceItem->quantity > 0) {
             $invoiceItem->decrement('quantity');
         }
 

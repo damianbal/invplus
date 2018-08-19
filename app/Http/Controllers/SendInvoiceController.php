@@ -10,8 +10,17 @@ use Illuminate\Support\Facades\Mail;
 
 class SendInvoiceController extends Controller
 {
+    public function __construct()
+    {       
+        $this->middleware('auth');
+    }
+
     public function send(Request $request, Invoice $invoice) 
     {
+        if(!auth()->user()->can('manage', $invoice)) {
+            return back();
+        }
+
         $data = $request->validate([
             'email' => 'min:3|required|email'
         ]);
